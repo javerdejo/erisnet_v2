@@ -26,6 +26,7 @@ input_dim = 0
 
 def loadAndShuffleFile(filename, columns, p):
     """Load and shuffle the data."""
+
     # cargo el archivo de datos
     data = pd.read_csv(filename)[columns]
 
@@ -38,6 +39,7 @@ def loadAndShuffleFile(filename, columns, p):
 
 def normData(train, test):
     """Normalize data with mean 0 and standar deviation 1."""
+
     # descompongo el conjunto de datos en data y target
     d_train = train.iloc[:, :-1] # data
     t_train = train.iloc[:, -1]  # target
@@ -58,6 +60,7 @@ def normData(train, test):
 
 def loadData(p=0.8):
     """Load data for training and testing."""
+
     # nombre de las columnas del set de datos que seran cargadas
     columns = ['rhos_412', 'rhos_469', 'rhos_555', 'rhos_645', 'rhos_859', 'rhos_1240', 'rhos_2130',
                'rhot_412', 'rhot_469', 'rhot_555', 'rhot_645', 'rhot_859', 'rhot_1240', 'rhot_2130',
@@ -83,36 +86,39 @@ def loadData(p=0.8):
 
 
 def createModel_ERISNet():
-   """Create the ERISNet sequencial model."""
-   model = Sequential()
-   model.add(Reshape(input_shape=(input_dim, 1), target_shape=(1, input_dim)))
-   for i in range(3):
-       model.add(Conv1D(64, 6, padding='same', kernel_regularizer=regularizers.l2(0.001),activation='relu'))
-       model.add(BatchNormalization())
-       model.add(Dropout(0.1))
+    """Create the ERISNet sequencial model."""
 
-   for i in range(3):
-       model.add(Conv1D(128, 5, padding='same', kernel_regularizer=regularizers.l2(0.001),activation='relu'))
-       model.add(BatchNormalization())
-       model.add(Dropout(0.1))
+    model = Sequential()
+    model.add(Reshape(input_shape=(input_dim, 1), target_shape=(1, input_dim)))
+    for i in range(3):
+        model.add(Conv1D(64, 6, padding='same', kernel_regularizer=regularizers.l2(0.001),activation='relu'))
+        model.add(BatchNormalization())
+        model.add(Dropout(0.1))
 
-   for i in range(3):
-       model.add(Conv1D(128, 3, padding='same', kernel_regularizer=regularizers.l2(0.001),activation='relu'))
-       model.add(BatchNormalization())
-       model.add(Dropout(0.1))
+    for i in range(3):
+        model.add(Conv1D(128, 5, padding='same', kernel_regularizer=regularizers.l2(0.001),activation='relu'))
+        model.add(BatchNormalization())
+        model.add(Dropout(0.1))
 
-   for i in range(2):
-       model.add(LSTM(units=64, return_sequences=True, activation='tanh'))
-       model.add(BatchNormalization())
+    for i in range(3):
+        model.add(Conv1D(128, 3, padding='same', kernel_regularizer=regularizers.l2(0.001),activation='relu'))
+        model.add(BatchNormalization())
+        model.add(Dropout(0.1))
 
-   model.add(Dropout(0.5))
-   model.add(GlobalAveragePooling1D())
+    for i in range(2):
+        model.add(LSTM(units=64, return_sequences=True, activation='tanh'))
+        model.add(BatchNormalization())
 
-   model.add(Dense(2, activation='softmax'))
-   model.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['accuracy'])
-   model.summary()
+    model.add(Dropout(0.5))
+    model.add(GlobalAveragePooling1D())
 
-   return model
+    model.add(Dense(2, activation='softmax'))
+    model.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['accuracy'])
+    model.summary()
+
+    plot_model(model, to_file='erisnet.png')
+
+    return model
 
 def mse(loss, val_loss):
     """Compute the Mean Square Error."""
@@ -120,6 +126,7 @@ def mse(loss, val_loss):
 
 def main(filename):
     """Define main function."""
+    
     global input_dim # contiene el numero de entradas de la red neuronal
 
     # loads and normalize the dataset
@@ -185,4 +192,5 @@ def main(filename):
 
 if __name__ == "__main__":
     print("ERISNet V2")
-    main('erisnet_net.h5')
+    #main('erisnet_net.h5')
+    createModel_ERISNet()
