@@ -154,10 +154,10 @@ def createModel_ERISNet():
         model.add(BatchNormalization())
         model.add(Dropout(0.1))
 
-#    for i in range(3):
-#        model.add(Conv1D(128, 3, padding='same', kernel_regularizer=regularizers.l2(0.001),activation='relu'))
-#        model.add(BatchNormalization())
-#        model.add(Dropout(0.1))
+    for i in range(3):
+        model.add(Conv1D(128, 3, padding='same', kernel_regularizer=regularizers.l2(0.001),activation='relu'))
+        model.add(BatchNormalization())
+        model.add(Dropout(0.1))
 
     for i in range(2):
         model.add(LSTM(units=64, return_sequences=True, activation='tanh'))

@@ -1,3 +1,9 @@
+"""
+   Author: Javier Arellano-Verdejo
+   Email: javier_arellano_verdejo@hotmail.com
+   Date: 08/08/2019
+"""
+
 from keras.utils import plot_model
 from keras.models import Model, Sequential
 from keras.layers import Input, Dense, Flatten, Reshape, BatchNormalization, GlobalAveragePooling1D, LSTM, Dropout
