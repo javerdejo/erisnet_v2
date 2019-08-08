@@ -1,4 +1,6 @@
+.vscode
 .gitignore
 erisnet.py
 *.png
 *.h5
+*.csv
